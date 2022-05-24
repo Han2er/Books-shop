@@ -1,6 +1,3 @@
-const div = document.createElement("div");
-const p = document.createElement("p");
-
 //create header
 document.body
   .appendChild(document.createElement("header"))
@@ -34,23 +31,6 @@ fetch("./src/books.json") //path to the file with json data
     data.map((book) => {
       cardBuilder(book, main);
     });
-
-    // data.map((book) => {
-    //   main.innerHTML += `
-    //   <div class='card'>
-    //     <img src=${book.imageLink} alt=${book.title}>
-    //     <div class="card-info">
-    //         <h3>${book.title}</h3>
-    //         <p>${book.author}</p>
-    //         <p class="price">Price: $${book.price}</p>
-    //         <p class="description button"><i class="bi bi-info-circle"></i> Description</p>
-    //       <div class="add-cart">
-    //         <p class="add-to-cart button" >Add to cart</p>
-    //       </div>
-    //     </div>
-    //   </div>`;
-    // });
-    // console.log(data);
   });
 
 const descText = document.createElement("p");
@@ -60,13 +40,19 @@ description.id = "description-window";
 description.appendChild(descText);
 description.addEventListener("click", function () {
   descText.innerHTML = "";
-  description.classList.toggle("show-description");
+  description.classList.toggle("show");
 });
 
 main.appendChild(description);
 
+//create cart container
+const cartList = document.createElement("div");
+cartList.id = "cart-list";
+cartList.className = "hide";
+main.appendChild(cartList);
+
 //create card builder function
-const cardBuilder = (book, index, mainList) => {
+const cardBuilder = (book, mainList) => {
   const bookTitle = document.createElement("h3");
   bookTitle.innerText = book.title;
   const bookAuthor = document.createElement("p");
@@ -80,15 +66,15 @@ const cardBuilder = (book, index, mainList) => {
   bookDescribtion.addEventListener("click", function (e) {
     console.log(e.target);
     descText.innerHTML = `${book.title} by ${book.author}<br/><br/>${book.description}`;
-    description.classList.toggle("show-description");
+    description.classList.toggle("show");
   });
 
-  const cartBtn = document.createElement("p");
-  cartBtn.innerText = "Add to cart";
+  const carText = document.createElement("p");
+  carText.innerText = "Add to cart";
 
-  const addCart = document.createElement("div");
-  addCart.className = "add-cart button";
-  addCart.appendChild(cartBtn);
+  const addCartBtn = document.createElement("div");
+  addCartBtn.className = "add-cart button";
+  addCartBtn.appendChild(carText);
 
   const cardInfo = document.createElement("div");
   cardInfo.className = "card-info";
@@ -96,7 +82,7 @@ const cardBuilder = (book, index, mainList) => {
   cardInfo.appendChild(bookAuthor);
   cardInfo.appendChild(bookPrice);
   cardInfo.appendChild(bookDescribtion);
-  cardInfo.appendChild(addCart);
+  cardInfo.appendChild(addCartBtn);
 
   const bookCover = document.createElement("img");
   bookCover.src = book.imageLink;
@@ -107,5 +93,39 @@ const cardBuilder = (book, index, mainList) => {
   card.appendChild(bookCover);
   card.appendChild(cardInfo);
 
-  main.appendChild(card);
+  mainList.appendChild(card);
+
+  addCartBtn.addEventListener("click", function (e) {
+    cartList.className = "show";
+    cartListCardBuilder(book, cartList);
+  });
+};
+
+//create cart-list card builder
+const cartListCardBuilder = (book, mainList) => {
+  const bookCoverImg = document.createElement("img");
+  bookCoverImg.src = book.imageLink;
+  bookCoverImg.alt = book.title;
+
+  const bookCoverDiv = document.createElement("div");
+  bookCoverDiv.className = "book-cover-incart";
+  bookCoverDiv.appendChild(bookCoverImg);
+
+  const title = document.createElement("h4");
+  title.innerText = book.title;
+
+  const deleteIcon = document.createElement("i");
+  deleteIcon.className = "bi bi-trash3";
+
+  const deleteBook = document.createElement("div");
+  deleteBook.className = "delete-book";
+  deleteBook.appendChild(deleteIcon);
+
+  const addedBook = document.createElement("div");
+  addedBook.className = "added-book";
+  addedBook.appendChild(bookCoverDiv);
+  addedBook.appendChild(title);
+  addedBook.appendChild(deleteBook);
+
+  mainList.appendChild(addedBook);
 };
