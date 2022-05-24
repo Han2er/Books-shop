@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Koulen&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500&display=swap");
 
 :root {
-  --main-color-light: #bdc3c7;
-  --main-color-dark: #2c3e50;
+  --main-color-light: #ffffff;
+  --main-color-dark: #000000;
 }
 
 * {
@@ -12,58 +13,128 @@
 
 body {
   background: var(--main-color-light);
+  background-color: #dcdcdc;
+  font-family: "Josefin Sans", sans-serif;
 }
 
+/* Header section */
 header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 60px;
+  justify-content: space-between;
+  height: 100vh;
   background: var(--main-color-dark);
   color: var(--main-color-light);
+  padding: 0 70px;
 }
-@media screen and (max-width: 370px) {
-  header {
-    height: 100px;
-    text-align: center;
-    line-height: 2em;
-  }
-}
-
 h1 {
   font-family: "Koulen", cursive;
-  font-size: 2em;
+  font-size: 6em;
   letter-spacing: 0.05em;
+  line-height: 90px;
 }
+header h3 {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 2.5em;
+}
+#bag {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  cursor: pointer;
+}
+#bag p {
+  font-size: 2em;
+}
+#bag-icon {
+  width: 40px;
+  height: 40px;
+  background: url(./src/bag.svg) no-repeat center;
+  background-size: cover;
+  filter: invert(1);
+}
+
+/* main section */
 main {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 30px;
+  margin-top: 40px;
+  gap: 40px;
 }
 
 .card {
-  width: 400px;
-  height: 200px;
-  /* background: #2980b9; */
-  border: 1px solid var(--main-color-dark);
-  border-radius: 10px;
   display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: var(--main-color-light);
+  border-radius: 20px;
+  padding: 50px;
+  gap: 50px;
+}
+.card:hover {
+  box-shadow: 0 5px 20px;
 }
 .card img {
   width: 140px;
-  height: 200px;
+  height: 210px;
   border-radius: 10px;
-  margin-right: 20px;
+  box-shadow: 5px 5px 10px;
 }
-/* .card-wraper {
+.card-info {
+  position: relative;
+  width: 100%;
+  height: 210px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
-} */
-a {
+}
+.card-info h3 {
+  font-size: 36px;
+}
+.card-info p {
+  font-size: 24px;
+}
+.price {
+  font-size: 90%;
+  font-style: italic;
+  font-weight: 500;
+}
+.button {
   cursor: pointer;
+}
+.add-cart {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 1px solid black;
+  padding: 15px;
+}
+.add-cart:hover {
+  color: var(--main-color-light);
+  background-color: var(--main-color-dark);
+}
+#description-window {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 99;
+  visibility: hidden;
+}
+#description-window p {
+  width: 60%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: var(--main-color-light);
+  color: var(--main-color-dark);
+}
+.show-description {
+  visibility: visible !important;
 }
