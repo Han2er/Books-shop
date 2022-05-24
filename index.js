@@ -76,10 +76,10 @@ const cardBuilder = (book, index, mainList) => {
   bookPrice.className = "price";
   const bookDescribtion = document.createElement("p");
   bookDescribtion.className = "description button";
-  bookDescribtion.innerHTML = "description";
+  bookDescribtion.innerHTML = "Description";
   bookDescribtion.addEventListener("click", function (e) {
     console.log(e.target);
-    descText.innerHTML = `${book.title} by ${book.author}<br/>${book.description}`;
+    descText.innerHTML = `${book.title} by ${book.author}<br/><br/>${book.description}`;
     description.classList.toggle("show-description");
   });
 

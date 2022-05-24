@@ -73,7 +73,7 @@ main {
   gap: 50px;
 }
 .card:hover {
-  box-shadow: 0 5px 20px;
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.3);
 }
 .card img {
   width: 140px;
@@ -114,6 +114,9 @@ main {
   color: var(--main-color-light);
   background-color: var(--main-color-dark);
 }
+.description {
+  color: #777;
+}
 #description-window {
   position: fixed;
   width: 100vw;
@@ -130,8 +133,9 @@ main {
 }
 #description-window p {
   width: 60%;
-  padding: 10px;
+  padding: 20px;
   border-radius: 10px;
+  font-size: 24px;
   background-color: var(--main-color-light);
   color: var(--main-color-dark);
 }
