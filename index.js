@@ -129,3 +129,10 @@ const cartListCardBuilder = (book, mainList) => {
 
   mainList.appendChild(addedBook);
 };
+
+//add footer
+const footNote = document.createElement("h5");
+footNote.innerText = "Created by Nikoloz";
+const footer = document.createElement("footer");
+footer.appendChild(footNote);
+document.body.appendChild(footer);
