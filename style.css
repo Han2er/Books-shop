@@ -227,3 +227,15 @@ footer h5 {
   height: auto;
   margin-bottom: 5px;
 }
+.cart-actions {
+  color: var(--main-color-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 25px 0;
+}
+.clear-all,
+.checkout {
+  cursor: pointer;
+}

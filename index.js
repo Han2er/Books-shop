@@ -1,4 +1,8 @@
+let totalPrice = 0;
+let bookCounter = 0;
+
 //create header
+
 document.body
   .appendChild(document.createElement("header"))
   .setAttribute("id", "header");
@@ -12,11 +16,15 @@ header
   .appendChild(document.createTextNode("Book Shop"));
 header.appendChild(document.createElement("div")).id = "bag";
 
+const bookCount = document.createElement("p");
+// bookCount.id = "book-count";
 const bag = document.getElementById("bag");
-bag
-  .appendChild(document.createElement("p"))
-  .appendChild(document.createTextNode("2"));
+bag.appendChild(bookCount);
 bag.appendChild(document.createElement("div")).id = "bag-icon";
+bag.addEventListener("click", function (e) {
+  cartList.classList.toggle("show");
+  cartList.classList.toggle("hide");
+});
 
 //add main section
 const main = document.createElement("main");
@@ -33,24 +41,55 @@ fetch("./src/books.json") //path to the file with json data
     });
   });
 
-const descText = document.createElement("p");
+//create description window
+{
+  const descText = document.createElement("p");
 
-const description = document.createElement("div");
-description.id = "description-window";
-description.appendChild(descText);
-description.addEventListener("click", function () {
-  descText.innerHTML = "";
-  description.classList.toggle("show");
+  const description = document.createElement("div");
+  description.id = "description-window";
+  description.appendChild(descText);
+  description.addEventListener("click", function () {
+    descText.innerHTML = "";
+    description.classList.toggle("show");
+  });
+
+  main.appendChild(description);
+}
+
+//create cart list container
+const cartPrice = document.createElement("p");
+cartPrice.className = "cart-price";
+const clearBooks = document.createElement("p");
+clearBooks.innerText = "Clear";
+clearBooks.className = "clear-all";
+
+const checkout = document.createElement("h5");
+checkout.innerText = "Checkout";
+checkout.className = "checkout";
+checkout.addEventListener("click", function (e) {
+  window.open("./checkout/checkout.html", "_self");
 });
 
-main.appendChild(description);
+const cartActions = document.createElement("div");
+cartActions.className = "cart-actions";
+cartActions.appendChild(cartPrice);
+cartActions.appendChild(clearBooks);
+cartActions.appendChild(checkout);
 
-//create cart container
 const cartList = document.createElement("div");
 cartList.id = "cart-list";
 cartList.className = "hide";
-main.appendChild(cartList);
+cartList.appendChild(cartActions);
 
+main.appendChild(cartList);
+clearBooks.addEventListener("click", function (e) {
+  let n = cartList.children.length;
+  for (let i = 1; i < n; i++) {
+    cartList.lastChild.remove();
+    cartPrice.innerText = `Total: \$${(totalPrice = 0)}`;
+    bookCount.innerText = `${(bookCounter = 0)}`;
+  }
+});
 //create card builder function
 const cardBuilder = (book, mainList) => {
   const bookTitle = document.createElement("h3");
@@ -98,6 +137,9 @@ const cardBuilder = (book, mainList) => {
   addCartBtn.addEventListener("click", function (e) {
     cartList.className = "show";
     cartListCardBuilder(book, cartList);
+    totalPrice = (totalPrice * 1000 + book.price * 1000) / 1000;
+    cartPrice.innerText = `Total: \$${totalPrice}`;
+    bookCount.innerText = `${++bookCounter}`;
   });
 };
 
@@ -120,6 +162,12 @@ const cartListCardBuilder = (book, mainList) => {
   const deleteBook = document.createElement("div");
   deleteBook.className = "delete-book";
   deleteBook.appendChild(deleteIcon);
+  deleteBook.addEventListener("click", function (e) {
+    e.target.parentElement.parentElement.remove();
+    totalPrice = (totalPrice * 1000 - book.price * 1000) / 1000;
+    cartPrice.innerText = `Total: \$${totalPrice}`;
+    bookCount.innerText = `${--bookCounter}`;
+  });
 
   const addedBook = document.createElement("div");
   addedBook.className = "added-book";
@@ -131,8 +179,10 @@ const cartListCardBuilder = (book, mainList) => {
 };
 
 //add footer
-const footNote = document.createElement("h5");
-footNote.innerText = "Created by Nikoloz";
-const footer = document.createElement("footer");
-footer.appendChild(footNote);
-document.body.appendChild(footer);
+{
+  const footNote = document.createElement("h5");
+  footNote.innerText = "Created by Nikoloz";
+  const footer = document.createElement("footer");
+  footer.appendChild(footNote);
+  document.body.appendChild(footer);
+}
