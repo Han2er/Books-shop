@@ -42,7 +42,7 @@ fetch("./src/books.json") //path to the file with json data
   });
 
 //create description window
-{
+
   const descText = document.createElement("p");
 
   const description = document.createElement("div");
@@ -54,7 +54,7 @@ fetch("./src/books.json") //path to the file with json data
   });
 
   main.appendChild(description);
-}
+
 
 //create cart list container
 const cartPrice = document.createElement("p");
