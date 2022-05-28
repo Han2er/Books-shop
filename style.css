@@ -161,7 +161,7 @@ main {
   align-items: center;
   padding: 10px 20px 0 20px;
   position: fixed;
-  width: 900px;
+  width: 80vw;
   height: 160px;
   bottom: 20px;
   background: rgba(0, 0, 0, 0.8);

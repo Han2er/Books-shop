@@ -11,14 +11,51 @@
 
 <body>
     <form action="" id="form" name="my-form">
-        <label for="name">Name*</label>
-        <input type="text" name="name" id="name" required><br>
+        <fieldset>
+            <legend>Order form:</legend>
 
-        <label for="surname">surname*</label>
-        <input type="text" name="surname" id="surname" required><br>
+            <label for="name">Name*</label><br>
+            <input type="text" name="name" id="name" minlength="4" pattern="[A-Za-z]{4,}" title="Letters only"
+                required><br>
 
-        <label for="date">Delivery date*</label>
-        <input type="date" name="date" id="date" required><br>
+            <label for="surname">Surname*</label><br>
+            <input type="text" name="surname" id="surname" minlength="5" pattern="[A-Za-z]{5,}" title="Letters only"
+                required><br>
+
+            <label for="date">Delivery date*</label><br>
+            <input type="date" name="date" id="date" required><br>
+
+            <label for="street">Street*</label><br>
+            <input type="text" name="street" id="street" minlength="5" required><br>
+
+            <label for="house">House number*</label><br>
+            <input type="number" name="house" id="house" min="1" required><br>
+
+            <label for="flat-number">Flat number*</label><br>
+            <input type="text" name="flat-number" id="flat-number" pattern="(^\d+)|(^\d+-\d+)"
+                title="shouldn't start with minus/dash symbol" required><br>
+
+            <p>Choose the payment type:</p>
+            <input type="radio" id="cash" name="payment" value="Cash" required>
+            <label for="cash">Cash</label><br>
+            <input type="radio" id="card" name="payment" value="Card">
+            <label for="card">Card</label><br>
+
+            <p>Choose 2 gifts: (optional)</p>
+            <input type="checkbox" name="gift" id="gift" value="Gift" onclick="checking(this)">
+            <label for="gift">pack as a gift</label><br>
+
+            <input type="checkbox" name="postcard" id="postcard" value="Postcard" onclick="checking(this)">
+            <label for="postcard">add postcard</label><br>
+
+            <input type="checkbox" name="discount" id="discount" value="Discount" onclick="checking(this)">
+            <label for="discount">provide 2% discount to the next time</label><br>
+
+            <input type="checkbox" name="pen" id="pen" value="Pen" onclick="checking(this)">
+            <label for="pen">branded pen or pencil</label><br>
+
+            <input type="submit" value="Complete">
+        </fieldset>
     </form>
 
     <script src="./checkout.js"></script>

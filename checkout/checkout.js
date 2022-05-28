@@ -11,3 +11,14 @@ if (mm < 10) {
 
 today = yyyy + "-" + mm + "-" + dd;
 document.getElementById("date").setAttribute("min", today);
+
+//checkbox limits
+var queue = [];
+function checking(id) {
+  queue.push(id);
+  if (queue.length === 3) {
+    queue[0].checked = false;
+    queue.shift();
+  }
+  console.log(queue);
+}
