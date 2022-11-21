@@ -9,12 +9,16 @@ document.body
 
 const header = document.getElementById("header");
 header
-  .appendChild(document.createElement("h3"))
+  .appendChild(document.createElement("h2"))
   .appendChild(document.createTextNode("Home"));
 header
   .appendChild(document.createElement("h1"))
   .appendChild(document.createTextNode("Book Shop"));
 header.appendChild(document.createElement("div")).id = "bag";
+
+header.firstChild.addEventListener("click", () => {
+  location.reload();
+});
 
 const bookCount = document.createElement("p");
 // bookCount.id = "book-count";
@@ -31,30 +35,37 @@ const main = document.createElement("main");
 main.id = "main";
 document.body.appendChild(main);
 
+// add books container
+const booksWrapper = document.createElement("div");
+booksWrapper.className = "books-wrapper";
+main.appendChild(booksWrapper);
+
+///////////////////////////////
+// Grab Books data
 fetch("./src/books.json") //path to the file with json data
   .then((response) => {
     return response.json();
   })
   .then((data) => {
     data.map((book) => {
-      cardBuilder(book, main);
+      cardBuilder(book, booksWrapper);
     });
   });
+///////////////////////////////
 
 //create description window
 
-  const descText = document.createElement("p");
+const descText = document.createElement("p");
 
-  const description = document.createElement("div");
-  description.id = "description-window";
-  description.appendChild(descText);
-  description.addEventListener("click", function () {
-    descText.innerHTML = "";
-    description.classList.toggle("show");
-  });
+const description = document.createElement("div");
+description.id = "description-window";
+description.appendChild(descText);
+description.addEventListener("click", function () {
+  descText.innerHTML = "";
+  description.classList.toggle("show");
+});
 
-  main.appendChild(description);
-
+main.appendChild(description);
 
 //create cart list container
 const cartPrice = document.createElement("p");
@@ -80,6 +91,23 @@ const cartList = document.createElement("div");
 cartList.id = "cart-list";
 cartList.className = "hide";
 cartList.appendChild(cartActions);
+// drop zone
+cartList.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.target.style.opacity = 1;
+});
+cartList.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  cartList.style.opacity = 0.5;
+});
+cartList.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const droppedId = e.dataTransfer.getData("text/plain");
+  const dropEl = document.getElementById(droppedId);
+  cartList.className = "show";
+  cartListCardBuilder(dropEl, cartList);
+});
+////
 
 main.appendChild(cartList);
 clearBooks.addEventListener("click", function (e) {
@@ -108,12 +136,16 @@ const cardBuilder = (book, mainList) => {
     description.classList.toggle("show");
   });
 
-  const carText = document.createElement("p");
-  carText.innerText = "Add to cart";
+  const cartText = document.createElement("p");
+  cartText.innerText = "Add to cart";
 
   const addCartBtn = document.createElement("div");
   addCartBtn.className = "add-cart button";
-  addCartBtn.appendChild(carText);
+  addCartBtn.appendChild(cartText);
+  addCartBtn.addEventListener("click", () => {
+    cartList.className = "show";
+    cartListCardBuilder(book, cartList);
+  });
 
   const cardInfo = document.createElement("div");
   cardInfo.className = "card-info";
@@ -128,33 +160,61 @@ const cardBuilder = (book, mainList) => {
   bookCover.alt = book.title;
 
   const card = document.createElement("div");
+  card.draggable = true;
+  card.id = (
+    book.title.replace(/\s/g, "-") +
+    "-by-" +
+    book.author.replace(/\s/g, "-")
+  ).toLowerCase();
   card.className = "card";
+  // drag events
+  card.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", card.id);
+    cartList.style.visibility = "visible";
+    cartList.style.opacity = 0.5;
+  });
+  card.addEventListener("dragend", () => {
+    cartList.style.visibility = "";
+    cartList.style.opacity = "";
+  });
+
   card.appendChild(bookCover);
   card.appendChild(cardInfo);
 
   mainList.appendChild(card);
-
-  addCartBtn.addEventListener("click", function (e) {
-    cartList.className = "show";
-    cartListCardBuilder(book, cartList);
-    totalPrice = (totalPrice * 1000 + book.price * 1000) / 1000;
-    cartPrice.innerText = `Total: \$${totalPrice}`;
-    bookCount.innerText = `${++bookCounter}`;
-  });
 };
 
 //create cart-list card builder
 const cartListCardBuilder = (book, mainList) => {
+  let titleValue = "";
+  let bookPrice = 0;
+  let imgSrc = "";
+
+  if (book.title) {
+    imgSrc = book.imageLink;
+    titleValue = book.title;
+    bookPrice = book.price;
+  } else {
+    imgSrc = book.firstChild.src;
+    titleValue = book.lastChild.firstChild.innerText;
+    bookPrice = +book.lastChild.children[2].innerText.split("$")[1];
+    console.log(bookPrice);
+  }
+
+  totalPrice = (totalPrice * 1000 + bookPrice * 1000) / 1000;
+  cartPrice.innerText = `Total: \$${totalPrice}`;
+  bookCount.innerText = `${++bookCounter}`;
+
   const bookCoverImg = document.createElement("img");
-  bookCoverImg.src = book.imageLink;
-  bookCoverImg.alt = book.title;
+  bookCoverImg.src = imgSrc;
+  bookCoverImg.alt = titleValue;
 
   const bookCoverDiv = document.createElement("div");
   bookCoverDiv.className = "book-cover-incart";
   bookCoverDiv.appendChild(bookCoverImg);
 
   const title = document.createElement("h4");
-  title.innerText = book.title;
+  title.innerText = titleValue;
 
   const deleteIcon = document.createElement("i");
   deleteIcon.className = "bi bi-trash3";
@@ -164,7 +224,7 @@ const cartListCardBuilder = (book, mainList) => {
   deleteBook.appendChild(deleteIcon);
   deleteBook.addEventListener("click", function (e) {
     e.target.parentElement.parentElement.remove();
-    totalPrice = (totalPrice * 1000 - book.price * 1000) / 1000;
+    totalPrice = (totalPrice * 1000 - bookPrice * 1000) / 1000;
     cartPrice.innerText = `Total: \$${totalPrice}`;
     bookCount.innerText = `${--bookCounter}`;
   });

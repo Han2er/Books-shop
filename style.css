@@ -19,10 +19,13 @@ body {
 
 /* Header section */
 header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100vh;
+  /* height: 100vh; */
   background: var(--main-color-dark);
   color: var(--main-color-light);
   padding: 0 70px;
@@ -33,9 +36,10 @@ h1 {
   letter-spacing: 0.05em;
   line-height: 90px;
 }
-header h3 {
+header h2 {
   font-family: "Josefin Sans", sans-serif;
   font-size: 2.5em;
+  cursor: pointer;
 }
 #bag {
   display: flex;
@@ -152,12 +156,12 @@ main {
   visibility: visible !important;
 }
 .hide {
-  visibility: hidden !important;
+  visibility: hidden;
 }
 
 #cart-list {
   display: flex;
-  /* justify-content: center; */
+  visibility: hidden;
   align-items: center;
   padding: 10px 20px 0 20px;
   position: fixed;
@@ -238,4 +242,10 @@ footer h5 {
 .clear-all,
 .checkout {
   cursor: pointer;
+}
+.clear-all:hover {
+  color: red;
+}
+.checkout:hover {
+  color: deepskyblue;
 }
